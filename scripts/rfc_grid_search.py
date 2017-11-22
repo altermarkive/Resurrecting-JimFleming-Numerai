@@ -1,9 +1,9 @@
 # import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from sklearn import cross_validation
+from sklearn import model_selection
 from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.grid_search import GridSearchCV as GS
+from sklearn.model_selection import GridSearchCV as GS
 from sklearn.metrics import accuracy_score, log_loss
 
 training_data = pd.read_csv('../datasets/numerai_training_data.csv', header=0)
@@ -11,7 +11,7 @@ tournament_data = pd.read_csv('../datasets/numerai_tournament_data.csv', header=
 features = [f for f in list(training_data) if 'feature' in f]
 
 # splitting my arrays in ratio of 30:70 percent
-features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(training_data[features], training_data['target'], test_size=0.3, random_state=0)
+features_train, features_test, labels_train, labels_test = model_selection.train_test_split(training_data[features], training_data['target'], test_size=0.3, random_state=0)
 
 # parameters
 parameters = {
