@@ -3,11 +3,12 @@ from sklearn import cross_validation
 from sklearn.svm import SVC as svc
 from sklearn.metrics import accuracy_score
 
-training_data = pd.read_csv('../datasets/numerai_training_data.csv')
-tournament_data = pd.read_csv('../datasets/numerai_tournament_data.csv')
+training_data = pd.read_csv('../datasets/numerai_training_data.csv', header=0)
+tournament_data = pd.read_csv('../datasets/numerai_tournament_data.csv', header=0)
+features = [f for f in list(training_data) if 'feature' in f]
 
 #this returns four arrays which is in the order of features_train, features_test, labels_train, labels_test
-features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(training_data.iloc[:,0:21], training_data['target'], test_size=0.3, random_state=0)
+features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(training_data[features], training_data['target'], test_size=0.3, random_state=0)
 
 clf = svc(C=1.0).fit(features_train, labels_train)
 
@@ -19,3 +20,12 @@ accuracy = accuracy_score(predictions,labels_test)
 print accuracy
 #c = 1.0 -> 0.514361849391
 #c = 100.0 -> 0.518133997785
+
+prob_predictions_tourney = clf.predict_proba(tournament_data[features])
+
+t_id = tournament_data['id']
+
+results = prob_predictions_tourney[:, 1]
+results_df = pd.DataFrame(data={'probability':results})
+joined = pd.DataFrame(t_id).join(results_df)
+joined.to_csv('predictions.ay_rfc.csv', index=False)
