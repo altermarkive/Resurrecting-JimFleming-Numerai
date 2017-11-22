@@ -6,8 +6,10 @@ from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.model_selection import GridSearchCV as GS
 from sklearn.metrics import accuracy_score, log_loss
 
-training_data = pd.read_csv('../datasets/numerai_training_data.csv', header=0)
-tournament_data = pd.read_csv('../datasets/numerai_tournament_data.csv', header=0)
+import os
+
+training_data = pd.read_csv(os.getenv('TRAINING'), header=0)
+tournament_data = pd.read_csv(os.getenv('TESTING'), header=0)
 features = [f for f in list(training_data) if 'feature' in f]
 
 # splitting my arrays in ratio of 30:70 percent
@@ -42,4 +44,4 @@ t_id = tournament_data['id']
 results = prob_predictions_tourney[:, 1]
 results_df = pd.DataFrame(data={'probability':results})
 joined = pd.DataFrame(t_id).join(results_df)
-joined.to_csv('predictions.ay_rfc_grid.csv', index=False)
+joined.to_csv(os.getenv('PREDICTING'), index=False)

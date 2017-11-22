@@ -3,8 +3,10 @@ from sklearn import model_selection
 from sklearn.svm import SVC as svc
 from sklearn.metrics import accuracy_score
 
-training_data = pd.read_csv('../datasets/numerai_training_data.csv', header=0)
-tournament_data = pd.read_csv('../datasets/numerai_tournament_data.csv', header=0)
+import os
+
+training_data = pd.read_csv(os.getenv('TRAINING'), header=0)
+tournament_data = pd.read_csv(os.getenv('TESTING'), header=0)
 features = [f for f in list(training_data) if 'feature' in f]
 
 #this returns four arrays which is in the order of features_train, features_test, labels_train, labels_test
@@ -29,4 +31,4 @@ t_id = tournament_data['id']
 results = prob_predictions_tourney[:, 1]
 results_df = pd.DataFrame(data={'probability':results})
 joined = pd.DataFrame(t_id).join(results_df)
-joined.to_csv('predictions.ay_rfc.csv', index=False)
+joined.to_csv(os.getenv('PREDICTING'), index=False)
