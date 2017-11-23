@@ -5,6 +5,9 @@ from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.metrics import accuracy_score, log_loss
 
 import os
+import sys
+
+eps = sys.float_info.epsilon
 
 training_data = pd.read_csv(os.getenv('TRAINING'), header=0)
 tournament_data = pd.read_csv(os.getenv('TESTING'), header=0)
@@ -32,5 +35,5 @@ t_id = tournament_data['id']
 
 results = prob_predictions_tourney[:, 1]
 results_df = pd.DataFrame(data={'probability':results})
-joined = pd.DataFrame(t_id).join(results_df)
-joined.to_csv(os.getenv('PREDICTING'), index=False)
+joined = pd.DataFrame(t_id).join(np.clip(results_df, 0.0 + eps, 1.0 - eps))
+joined.to_csv(os.getenv('PREDICTING'), index=False, float_format='%.16f')
