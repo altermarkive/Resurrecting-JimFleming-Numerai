@@ -38,4 +38,3 @@ test['probability'] = p[:,1]
 test.to_csv( output_file, columns = ( 't_id', 'probability' ), index = None )
 
 # 0.69101 public
-	
