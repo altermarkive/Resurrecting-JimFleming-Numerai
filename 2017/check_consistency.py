@@ -20,14 +20,14 @@ except IndexError:
 
 try:
 	print( "loading {}...".format( submission_file ))
-	s = pd.read_csv( submission_file )
+	s = pd.read_csv(submission_file, header=0)
 except:
 	print( "\nUsage: check_consistency.py <predictions file> <test file>" )
 	print( "  i.e. check_consistency.py p.csv numerai_tournament_data.csv\n" )
 	raise SystemExit
 
 print( "loading {}...\n".format( test_file ))
-test = pd.read_csv( test_file )
+test = pd.read_csv(test_file, header=0)
 
 v = test[ test.data_type == 'validation' ].copy()
 v = v.merge( s, on = 'id', how = 'left' )

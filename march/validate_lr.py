@@ -39,14 +39,15 @@ def transform_train_and_evaluate( transformer ):
 
 input_file = 'data/numerai_training_data.csv'
 
-d = pd.read_csv( input_file )
+d = pd.read_csv(input_file, header=0)
+features = [f for f in list(d) if 'feature' in f]
 train, val = train_test_split( d, test_size = 5000 )
 
 y_train = train.target.values
 y_val = val.target.values
 
-x_train = train.drop( 'target', axis = 1 )
-x_val = val.drop( 'target', axis = 1 )
+x_train = train[features]
+x_val = val[features]
 
 # train, predict, evaluate
 

@@ -14,7 +14,8 @@ input_file = 'data/orig/numerai_training_data.csv'
 
 #
 
-d = pd.read_csv( input_file )
+d = pd.read_csv(input_file, header=0)
+features = [f for f in list(d) if 'feature' in f]
 train, val = train_test_split( d, test_size = 5000 )
 
 # train, predict, evaluate
@@ -22,9 +23,9 @@ train, val = train_test_split( d, test_size = 5000 )
 n_trees = 100
 
 rf = RF( n_estimators = n_trees, verbose = True )
-rf.fit( train.drop( 'target', axis = 1 ), train.target )
+rf.fit(train[features], train.target)
 
-p = rf.predict_proba( val.drop( 'target', axis = 1 ))
+p = rf.predict_proba(val[features])
 
 ll = log_loss(val.target.values, p[:,1])
 auc = AUC( val.target.values, p[:,1] )

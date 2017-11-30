@@ -13,15 +13,16 @@ output_file = 'data/predictions_lr.csv'
 
 #
 
-train = pd.read_csv( train_file )
-test = pd.read_csv( test_file )
+train = pd.read_csv(train_file, header=0)
+test = pd.read_csv(test_file, header=0)
+features = [f for f in list(train) if 'feature' in f]
 
 #
 
 y_train = train.target.values
 
-x_train = train.drop( 'target', axis = 1 )
-x_test = test.drop( 't_id', axis = 1 )
+x_train = train[features]
+x_test = test[features]
 
 print "training..."
 
@@ -35,6 +36,6 @@ p = lr.predict_proba( x_test )
 print "saving..."
 
 test['probability'] = p[:,1]
-test.to_csv( output_file, columns = ( 't_id', 'probability' ), index = None )
+test.to_csv(output_file, columns=('id', 'probability'), index=None)
 
 # 0.69101 public
