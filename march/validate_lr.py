@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 "Load data, create the validation split, optionally scale data, train a linear model, evaluate"
 "Code updated for march 2016 data"
 
 import pandas as pd
 
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Normalizer, PolynomialFeatures
 from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler, StandardScaler, RobustScaler
@@ -53,8 +53,8 @@ x_val = val[features]
 
 auc, ll = train_and_evaluate( y_train, x_train, y_val, x_val )
 
-print "No transformation"
-print "AUC: {:.2%}, log loss: {:.2%} \n".format( auc, ll )
+print("No transformation")
+print("AUC: {:.2%}, log loss: {:.2%} \n".format(auc, ll))
 
 # try different transformations for X
 # X is already scaled to (0,1) so these won't make much difference
@@ -67,9 +67,9 @@ transformers = [ MaxAbsScaler(), MinMaxScaler(), RobustScaler(), StandardScaler(
 
 for transformer in transformers:
 
-	print transformer
+	print(transformer)
 	auc, ll = transform_train_and_evaluate( transformer )
-	print "AUC: {:.2%}, log loss: {:.2%} \n".format( auc, ll )
+	print("AUC: {:.2%}, log loss: {:.2%} \n".format(auc, ll))
 
 """
 No transformation

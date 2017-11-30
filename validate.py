@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 "Load data, create the validation split, train a random forest, evaluate"
 "uncomment the appropriate lines to save processed data to disk"
 
 import pandas as pd
 
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier as RF
 from sklearn.metrics import roc_auc_score as AUC
 from sklearn.metrics import log_loss
@@ -29,4 +29,4 @@ p = rf.predict_proba(val[features])
 
 ll = log_loss(val.target.values, p[:,1])
 auc = AUC( val.target.values, p[:,1] )
-print "AUC: {:.2%}, log loss: {:.2%}".format(auc, ll)
+print("AUC: {:.2%}, log loss: {:.2%}".format(auc, ll))

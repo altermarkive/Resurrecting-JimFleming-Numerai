@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 "Load data, scale, train a linear model, output predictions"
 
@@ -24,16 +24,16 @@ y_train = train.target.values
 x_train = train[features]
 x_test = test[features]
 
-print "training..."
+print("training...")
 
 lr = LR()
 lr.fit( x_train, y_train )
 
-print "predicting..."
+print("predicting...")
 
 p = lr.predict_proba( x_test )
 
-print "saving..."
+print("saving...")
 
 test['probability'] = p[:,1]
 test.to_csv(output_file, columns=('id', 'probability'), index=None)
