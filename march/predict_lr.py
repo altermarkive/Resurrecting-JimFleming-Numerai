@@ -5,11 +5,14 @@
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
+from sklearn.preprocessing import Normalizer, MaxAbsScaler, StandardScaler, RobustScaler
 from sklearn.linear_model import LogisticRegression as LR
 
-train_file = 'data/numerai_training_data.csv'
-test_file = 'data/numerai_tournament_data.csv'
-output_file = 'data/predictions_lr.csv'
+import os
+
+train_file = os.getenv('TRAINING')
+test_file = os.getenv('TESTING')
+output_file = os.getenv('PREDICTING')
 
 #
 
@@ -23,6 +26,18 @@ y_train = train.target.values
 
 x_train = train[features]
 x_test = test[features]
+
+transformers = [ MaxAbsScaler(), MinMaxScaler(), RobustScaler(), StandardScaler(),
+        Normalizer( norm = 'l1' ), Normalizer( norm = 'l2' ), Normalizer( norm = 'max' ) ]
+
+#poly_scaled = Pipeline([('poly', PolynomialFeatures()), ('scaler', MinMaxScaler())])
+#transformers.extend([PolynomialFeatures(), poly_scaled])
+
+selecting = int(os.getenv('SELECTING'))
+if selecting != 0:
+	transformer = transformers[selecting - 1]
+	x_train = transformer.fit_transform(x_train)
+	x_test = transformer.transform(x_test)
 
 print("training...")
 

@@ -10,7 +10,9 @@ from sklearn.ensemble import RandomForestClassifier as RF
 from sklearn.metrics import roc_auc_score as AUC
 from sklearn.metrics import log_loss
 
-input_file = 'data/orig/numerai_training_data.csv'
+import os
+
+input_file = os.getenv('TRAINING')
 
 #
 

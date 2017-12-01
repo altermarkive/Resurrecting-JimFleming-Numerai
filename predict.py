@@ -5,9 +5,11 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier as RF
 
-train_file = 'data/orig/numerai_training_data.csv'
-test_file = 'data/orig/numerai_tournament_data.csv'
-output_file = 'data/predictions.csv'
+import os
+
+train_file = os.getenv('TRAINING')
+test_file = os.getenv('TESTING')
+output_file = os.getenv('PREDICTING')
 
 #
 

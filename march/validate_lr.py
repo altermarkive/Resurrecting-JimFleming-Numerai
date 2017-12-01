@@ -3,6 +3,8 @@
 "Load data, create the validation split, optionally scale data, train a linear model, evaluate"
 "Code updated for march 2016 data"
 
+import json
+
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
@@ -11,6 +13,8 @@ from sklearn.preprocessing import Normalizer, PolynomialFeatures
 from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler, StandardScaler, RobustScaler
 from sklearn.linear_model import LogisticRegression as LR
 from sklearn.metrics import roc_auc_score as AUC, accuracy_score as accuracy, log_loss
+
+import os
 
 #
 
@@ -37,7 +41,7 @@ def transform_train_and_evaluate( transformer ):
 	
 #
 
-input_file = 'data/numerai_training_data.csv'
+input_file = os.getenv('TRAINING')
 
 d = pd.read_csv(input_file, header=0)
 features = [f for f in list(d) if 'feature' in f]
@@ -56,20 +60,31 @@ auc, ll = train_and_evaluate( y_train, x_train, y_val, x_val )
 print("No transformation")
 print("AUC: {:.2%}, log loss: {:.2%} \n".format(auc, ll))
 
+selecting = 0
+selecting_log_loss = ll
+
 # try different transformations for X
 # X is already scaled to (0,1) so these won't make much difference
 
 transformers = [ MaxAbsScaler(), MinMaxScaler(), RobustScaler(), StandardScaler(),  
 	Normalizer( norm = 'l1' ), Normalizer( norm = 'l2' ), Normalizer( norm = 'max' ) ]
 
-#poly_scaled = Pipeline([ ( 'poly', PolynomialFeatures()), ( 'scaler', MinMaxScaler()) ])
-#transformers.append( PolynomialFeatures(), poly_scaled )
+#poly_scaled = Pipeline([('poly', PolynomialFeatures()), ('scaler', MinMaxScaler())])
+#transformers.extend([PolynomialFeatures(), poly_scaled])
 
-for transformer in transformers:
+for i, transformer in enumerate(transformers):
 
 	print(transformer)
 	auc, ll = transform_train_and_evaluate( transformer )
 	print("AUC: {:.2%}, log loss: {:.2%} \n".format(auc, ll))
+	if ll < selecting_log_loss:
+		selecting = i + 1
+		selecting_log_loss = ll
+
+validating = os.getenv('VALIDATING')
+if validating is not None:
+    with open(validating, 'wb') as handle:
+        handle.write(json.dumps({'selecting': selecting}).encode('utf-8'))
 
 """
 No transformation
