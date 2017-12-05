@@ -25,7 +25,7 @@ features = [f for f in list(train) if 'feature' in f]
 
 n_trees = 1000
 
-rf = RF( n_estimators = n_trees, verbose = True )
+rf = RF(n_estimators = n_trees, verbose = True, n_jobs=-1)
 rf.fit(train[features], train.target)
 
 p = rf.predict_proba(test[features])

@@ -45,7 +45,7 @@ if selecting != 0:
 
 print("training...")
 
-lr = LR()
+lr = LR(n_jobs=-1)
 lr.fit( x_train, y_train )
 
 print("predicting...")
