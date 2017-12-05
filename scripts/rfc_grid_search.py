@@ -27,7 +27,7 @@ parameters = {
 }
 
 # implementing my classifier
-model = RFC()
+model = RFC(n_jobs=-1)
 grid = GS(estimator=model, param_grid=parameters)
 grid.fit(features_train, labels_train)
 

@@ -17,7 +17,7 @@ features = [f for f in list(training_data) if 'feature' in f]
 features_train, features_test, labels_train, labels_test = model_selection.train_test_split(training_data[features], training_data['target'], test_size=0.3, random_state=0)
 
 # implementing my classifier
-clf = RFC(n_estimators=25, random_state=0).fit(features_train, labels_train)
+clf = RFC(n_estimators=25, random_state=0, n_jobs=-1).fit(features_train, labels_train)
 
 # Calculate the logloss of the model
 prob_predictions_class_test = clf.predict(features_test)
