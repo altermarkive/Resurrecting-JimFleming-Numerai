@@ -3,9 +3,13 @@
 "Load data, train a random forest, output predictions"
 
 import pandas as pd
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier as RF
 
 import os
+import sys
+
+eps = sys.float_info.epsilon
 
 train_file = os.getenv('TRAINING')
 test_file = os.getenv('TESTING')
@@ -28,5 +32,5 @@ p = rf.predict_proba(test[features])
 
 # save
 
-test['probability'] = p[:,1]
-test.to_csv(output_file, columns=('id', 'probability'), index=None)
+test['probability'] = np.clip(p[:,1], 0.0 + eps, 1.0 - eps)
+test.to_csv(output_file, columns=('id', 'probability'), index=None, float_format='%.16f')

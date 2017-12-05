@@ -3,12 +3,16 @@
 "Load data, scale, train a linear model, output predictions"
 
 import pandas as pd
+import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
 from sklearn.preprocessing import Normalizer, MaxAbsScaler, StandardScaler, RobustScaler
 from sklearn.linear_model import LogisticRegression as LR
 
 import os
+import sys
+
+eps = sys.float_info.epsilon
 
 train_file = os.getenv('TRAINING')
 test_file = os.getenv('TESTING')
@@ -50,7 +54,7 @@ p = lr.predict_proba( x_test )
 
 print("saving...")
 
-test['probability'] = p[:,1]
-test.to_csv(output_file, columns=('id', 'probability'), index=None)
+test['probability'] = np.clip(p[:,1], 0.0 + eps, 1.0 - eps)
+test.to_csv(output_file, columns=('id', 'probability'), index=None, float_format='%.16f')
 
 # 0.69101 public
