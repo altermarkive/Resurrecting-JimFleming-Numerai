@@ -8,10 +8,10 @@ import os
 def main():
     base = os.path.dirname(os.path.realpath(__file__))
     operation = os.getenv('OPERATION')
-    if True or operation == 'RFC':
+    if operation == 'RFC':
         # os.system('python3 {}'.format(os.path.join(base, 'validate.py')))
         os.system('python3 {}'.format(os.path.join(base, 'predict.py')))
-    if True or operation == 'LogisticRegression':
+    if operation == 'LogisticRegression':
         if os.getenv('SELECTING') is None:
             if os.getenv('VALIDATING') is None:
                 os.environ['VALIDATING'] = '/tmp/result.json'
@@ -21,7 +21,7 @@ def main():
                 selecting = int(result['selecting'])
                 os.environ['SELECTING'] = str(selecting)
         os.system('python3 {}'.format(os.path.join(base, 'predict_lr.py')))
-    if True or operation == 'ConsistencyCheck':
+    if operation == 'ConsistencyCheck':
         os.system('python3 {}'.format(os.path.join(base, 'check_consistency.py')))
 
 
