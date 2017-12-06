@@ -7,7 +7,7 @@ Created on Fri Feb 17 13:40:47 2017
 """
 import pandas as pd
 import datetime as dt
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import log_loss
 import wide_and_deep_model
 import random

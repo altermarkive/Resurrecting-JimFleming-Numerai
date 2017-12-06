@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Mon Oct 17 19:25:57 2016
@@ -49,6 +49,7 @@ def build_estimator(model_dir, model_type, feature_cols):
         linear_feature_columns=wide_columns,
         dnn_feature_columns=deep_columns,
         dnn_hidden_units=[50,50,50,50,50,50],
+        fix_global_step_increment_bug=True,
         #dnn_optimizer=optimizer
         )
   
