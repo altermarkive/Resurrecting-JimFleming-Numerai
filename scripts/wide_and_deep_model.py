@@ -12,7 +12,6 @@ from __future__ import division
 from __future__ import print_function
 
 import tempfile
-from six.moves import urllib
 import itertools
 import pandas as pd
 import tensorflow as tf

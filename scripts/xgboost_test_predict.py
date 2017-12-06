@@ -14,7 +14,6 @@ import xgboost as xgb
 import random
 import time
 from sklearn.metrics import average_precision_score
-import matplotlib.pyplot as plt
 from sklearn import preprocessing
 
 from sklearn.metrics import roc_curve, auc,recall_score,precision_score
