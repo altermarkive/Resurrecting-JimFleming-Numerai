@@ -5,15 +5,18 @@ Created on Fri Feb 17 13:40:47 2017
 
 @author: jeremy
 """
+import numpy as np
 import pandas as pd
 import datetime as dt
 import wide_and_deep_model
 import numpy as np
 
 import os
+import sys
     
     
-    
+eps = sys.float_info.epsilon
+
 if __name__ == "__main__":
     start_time = dt.datetime.now()
     print("Start time: ",start_time)
@@ -37,8 +40,8 @@ if __name__ == "__main__":
     print("Creating submission file...")
     out_df = test.id.copy()
     out_df=out_df.to_frame()
-    out_df['probability']=preds
-    out_df.to_csv(os.getenv('PREDICTING'), index=False)  
+    out_df['probability'] = np.clip(preds, 0.0 + eps, 1.0 - eps)
+    out_df.to_csv(os.getenv('PREDICTING'), index=False, float_format='%.16f')
     print("Submission file created: ") 
     
     print(dt.datetime.now()-start_time)

@@ -5,6 +5,7 @@ Created on Fri Feb 17 13:40:47 2017
 
 @author: jeremy
 """
+import numpy as np
 import pandas as pd
 import datetime as dt
 from sklearn.model_selection import train_test_split
@@ -19,10 +20,11 @@ from sklearn import preprocessing
 from sklearn.metrics import roc_curve, auc,recall_score,precision_score
 
 import os
+import sys
 
 
+eps = sys.float_info.epsilon
 
-    
 def create_feature_map(features):
     outfile = open('xgb.fmap', 'w')
     for i, feat in enumerate(features):
@@ -149,8 +151,8 @@ if __name__ == "__main__":
     print("Creating submission file...")
     out_df = test.id.copy()
     out_df=out_df.to_frame()
-    out_df['probability']=preds
-    out_df.to_csv(os.getenv('PREDICTING'), index=False)  
+    out_df['probability'] = np.clip(preds, 0.0 + eps, 1.0 - eps)
+    out_df.to_csv(os.getenv('PREDICTING'), index=False, float_format='%.16f')
     print("Submission file created: ",dt.datetime.now()-start_time) 
     
     print(dt.datetime.now()-start_time)
