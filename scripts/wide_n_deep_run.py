@@ -12,7 +12,7 @@ from sklearn.metrics import log_loss
 import wide_and_deep_model
 import random
 
-
+import os
     
     
     
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("Start time: ",start_time)
   
 
-    train = pd.read_csv('../numerai_training_data.csv', header=0)
+    train = pd.read_csv(os.getenv('TRAINING'), header=0)
     print(train.isnull().values.any())
     features = [f for f in list(train) if 'feature' in f]
     

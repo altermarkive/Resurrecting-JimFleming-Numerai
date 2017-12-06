@@ -18,7 +18,7 @@ from sklearn import preprocessing
 
 from sklearn.metrics import roc_curve, auc,recall_score,precision_score
 
-
+import os
 
 
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     print("Start time: ",start_time)
   
 
-    train = pd.read_csv('../numerai_training_data.csv', header=0)
+    train = pd.read_csv(os.getenv('TRAINING'), header=0)
     print(train.isnull().values.any())
     features = [f for f in list(train) if 'feature' in f]
     
