@@ -126,11 +126,9 @@ if __name__ == "__main__":
     print("Start time: ",start_time)
   
 
-    train = pd.read_csv('../numerai_training_data.csv')
+    train = pd.read_csv('../numerai_training_data.csv', header=0)
     print(train.isnull().values.any())
-    features=list(train.columns)
-
-    features.remove('target')
+    features = [f for f in list(train) if 'feature' in f]
     
     #rem_list=['feature19','feature12','feature21','feature24']
     

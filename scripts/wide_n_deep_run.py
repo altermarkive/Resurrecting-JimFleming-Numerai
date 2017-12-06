@@ -21,11 +21,9 @@ if __name__ == "__main__":
     print("Start time: ",start_time)
   
 
-    train = pd.read_csv('../numerai_training_data.csv')
+    train = pd.read_csv('../numerai_training_data.csv', header=0)
     print(train.isnull().values.any())
-    features=list(train.columns)
-    
-    features.remove('target')
+    features = [f for f in list(train) if 'feature' in f]
     
     #rem_list=['feature19','feature12','feature21','feature24']
     
@@ -39,7 +37,7 @@ if __name__ == "__main__":
     print(features)
 
     print("Building model.. ",dt.datetime.now()-start_time)
-    preds = wide_and_deep_model.train_and_eval(train,test,"wide_n_deep",'target')
+    preds = wide_and_deep_model.train_and_eval(train, test, 'wide_n_deep', features, 'target')
     score = log_loss(test['target'].values, preds)
 
     print('logloss: {:.6f}'.format(score))

@@ -19,24 +19,23 @@ if __name__ == "__main__":
     print("Start time: ",start_time)
   
 
-    train = pd.read_csv('../numerai_training_data.csv')
-    test = pd.read_csv('../numerai_tournament_data.csv')
+    train = pd.read_csv('../numerai_training_data.csv', header=0)
+    test = pd.read_csv('../numerai_tournament_data.csv', header=0)
 
-    features=list(train.columns)
+    features = [f for f in list(train) if 'feature' in f]
     test['target']=np.nan
-    features.remove('target')
     
 
     
     print(features)
 
     print("Building model.. ",dt.datetime.now()-start_time)
-    preds = wide_and_deep_model.train_and_eval(train,test,"wide_n_deep",'target')
+    preds = wide_and_deep_model.train_and_eval(train, test, 'wide_n_deep', features, 'target')
 
     
     
     print("Creating submission file...")
-    out_df = test.t_id.copy()
+    out_df = test.id.copy()
     out_df=out_df.to_frame()
     out_df['probability']=preds
     out_df.to_csv('submission_file.csv', index=False)  
