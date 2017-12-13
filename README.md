@@ -1,3 +1,7 @@
+# Preface
+
+This repository fork accompanies that YouTube video: https://youtu.be/wju1qtTNiFs
+
 # numer.ai tournament challenge submission.
 
 [Numerai](http://numer.ai/) is almost like Kaggle but with clean and tidy dataset; Numerai is a global artificial intelligence tournament to predict the stock market. You download the data, build a model, and upload your predictions. It’s rather hard to find a contest where you could just apply whatever methods you fancy, without much data cleaning and feature engineering. In this tournament, you can do exactly that.
