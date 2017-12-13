@@ -1,3 +1,7 @@
+# Preface
+
+This repository fork accompanies that YouTube video: https://youtu.be/wju1qtTNiFs
+
 # Numerai
 
 Numerai is a new kind of hedge fund that pays out a reward to data scientists that can improve their meta model.
