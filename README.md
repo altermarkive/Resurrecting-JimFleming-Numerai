@@ -1,3 +1,7 @@
+# Preface
+
+This repository fork accompanies that YouTube video: https://youtu.be/wju1qtTNiFs
+
 # numer.ai
 
 You probably want [2017](2017/).
