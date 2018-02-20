@@ -1,5 +1,7 @@
 # Numerai: Evaluator
 
+This repository accompanies that YouTube video: [https://youtu.be/9yrPrE37eJc](https://youtu.be/9yrPrE37eJc)
+
 Assuming the data is supposed to be kept in current directory the evaluator container can be run with the following command:
 
     docker run \
