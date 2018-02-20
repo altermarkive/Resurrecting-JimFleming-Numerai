@@ -1,0 +1,2 @@
+pyinotify==0.9.6
+numerapi==0.8.1
