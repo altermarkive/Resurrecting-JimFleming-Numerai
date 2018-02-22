@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 
 class Captor(pyinotify.ProcessEvent, threading.Thread):
     def __init__(self, directory, pattern):
-        super(Captor, self).__init__()
+        threading.Thread.__init__(self)
         self.directory = directory
         self.pattern = pattern
         self.spec = os.path.join(self.directory, self.pattern)
