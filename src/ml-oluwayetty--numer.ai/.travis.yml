@@ -1,0 +1,9 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - docker build -t $DOCKERHUB_USERNAME/numerai-ay .
+  - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+  - docker push $DOCKERHUB_USERNAME/numerai-ay
