@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<div><img src="part4/01.jpg" width="90%"/></div>
+<small style="text-align: justify;">Numerai & ML - Part 4 - Jim Fleming's models</small>
+</section>
+<section>
+<div><img src="part4/02.jpg" width="90%"/></div>
+<small style="text-align: justify;">In my search for inspiration I came across a post of Jim Fleming on Medium. In his generosity, he shared his insight and the code he used to make predictions for Numerai.</small>
+</section>
+<section>
+<div><img src="part4/03.jpg" width="90%"/></div>
+<small style="text-align: justify;">Since he wrote it for one of the early tournaments, I needed to update the code to the new input data format and make sure the predictions fall into an open interval from zero to one.</small>
+</section>
+<section>
+<div><img src="part4/04.jpg" width="90%"/></div>
+<small style="text-align: justify;">I also updated the calls to the deprecated TensorFlow and scikit-learn functions.</small>
+</section>
+<section>
+<div><img src="part4/05.jpg" width="90%"/></div>
+<small style="text-align: justify;">I collected all the modules the code required and wrapped it into a Docker container (mind that the Dockerfile is heavily abridged here).</small>
+</section>
+<section>
+<div><img src="part4/06.jpg" width="90%"/></div>
+<small style="text-align: justify;">Just like in previous cases I made sure I can pass some parameters when launching the Docker container.</small>
+</section>
+<section>
+<div><img src="part4/07.jpg" width="90%"/></div>
+<small style="text-align: justify;">Here is the command to use to launch the container. Since the code makes use of multiple different models the OPERATION parameter allows to pick one of them.</small>
+</section>
+<section>
+<div><img src="part4/08.jpg" width="90%"/></div>
+<small style="text-align: justify;">Now let's have a closer look at how it's organized internally. As mentioned, the code uses multiple models.</small>
+</section>
+<section>
+<div><img src="part4/09.jpg" width="90%"/></div>
+<small style="text-align: justify;">The input data for the models is prepared by applying a method called "adversarial validation" (you can have a look at the original post for details).</small>
+</section>
+<section>
+<div><img src="part4/10.jpg" width="90%"/></div>
+<small style="text-align: justify;">There are also additional features added to the input data by applying a dimensionality reduction method called t-SNE.</small>
+</section>
+<section>
+<div><img src="part4/11.jpg" width="90%"/></div>
+<small style="text-align: justify;">Finally, after passing the data through selected models, the predictions are combined through a method called ensembling.</small>
+</section>
+<section>
+<div><img src="part4/12.jpg" width="90%"/></div>
+<small style="text-align: justify;">That last step was one of the more interesting things I learned from that post. And you can also learn more if you follow this link.</small>
+</section>
+<section>
+<div><img src="part4/13.jpg" width="90%"/></div>
+<small style="text-align: justify;">In conclusion of his post Jim mentions the use of four models in an ensemble. However, one of them (using Gradient Boosted Trees) was missing from the code he shared on GitHub.</small>
+</section>
+<section>
+<div><img src="part4/14.jpg" width="90%"/></div>
+<small style="text-align: justify;">Following the limited description, I added it back.</small>
+</section>
+<section>
+<div><img src="part4/15.jpg" width="90%"/></div>
+<small style="text-align: justify;">One interesting thing mentioned in the post was TPOT. This is an automated machine learning framework (using Genetic Algorithms) somewhat related in the spirit to Auto-WEKA and auto-sklearn covered in the previous part. I completed the unfinished code to make use of it as well.</small>
+</section>
+<section>
+<div><img src="part4/16.jpg" width="90%"/></div>
+<small style="text-align: justify;">One of the observations I made was that earlier the features had uniform distributions</small>
+</section>
+<section>
+<div><img src="part4/17.jpg" width="90%"/></div>
+<small style="text-align: justify;">but currently the distributions were Gaussian.</small>
+</section>
+<section>
+<div><img src="part4/18.jpg" width="90%"/></div>
+<small style="text-align: justify;">Since among the models there are ones using neural networks I decided to normalize the features using StandardScaler instead of MinMaxScaler (though I realize that choice may be misguided).</small>
+</section>
+<section>
+<div><img src="part4/19.jpg" width="90%"/></div>
+<small style="text-align: justify;">I also noticed that currently there appears to be less correlation between features.</small>
+</section>
+<section>
+<div><img src="part4/20.jpg" width="90%"/></div>
+<small style="text-align: justify;">This is perhaps more apparent on a pair plot. Though, due to the number of features, it may not be visible here very well.</small>
+</section>
+<section>
+<div><img src="part4/21.jpg" width="90%"/></div>
+<small style="text-align: justify;">Though, due to the number of features, it may not be visible here very well.</small>
+</section>
+<section>
+<div><img src="part4/22.jpg" width="90%"/></div>
+<small style="text-align: justify;">The post also mentions using a particular set of perplexities with t-SNE...</small>
+</section>
+<section>
+<div><img src="part4/23.jpg" width="90%"/></div>
+<small style="text-align: justify;">...so I updated the code to reflect that.</small>
+</section>
+<section>
+<div><img src="part4/24.jpg" width="90%"/></div>
+<small style="text-align: justify;">Speaking of t-SNE - the original code used an implementation by the GitHub user alexisbcook...</small>
+</section>
+<section>
+<div><img src="part4/25.jpg" width="90%"/></div>
+<small style="text-align: justify;">...but I replaced it with an implementation making use of multicore processing for 2D t-SNE. You can follow the link to find out more about the module created by DmitryUlyanov.</small>
+</section>
+<section>
+<div><img src="part4/26.jpg" width="90%"/></div>
+<small style="text-align: justify;">Unfortunately, 3D t-SNE is much slower so I decided to explore if it can be omitted altogether. Here are the scores for the models applied to the data including 3D t-SNE. Note that for this tournament there is one model which passes all criteria.</small>
+</section>
+<section>
+<div><img src="part4/27.jpg" width="90%"/></div>
+<small style="text-align: justify;">I added an option to disable using 3D t-SNE and here are the scores for the same tournament with that option enabled. It turned out that only some of the models were affected and, for others, with one exception the results were only slightly worse.</small>
+</section>
+<section>
+<div><img src="part4/28.jpg" width="90%"/></div>
+<small style="text-align: justify;">Exploring further, I compared 2D projections of t-SNE from the early and current tournaments, and it would appear that one can see now less pronounced local clusters.</small>
+</section>
+<section>
+<div><img src="part4/29.jpg" width="90%"/></div>
+<small style="text-align: justify;">This change is even more visible when comparing 3D projections of t-SNE. Perhaps t-SNE is not as effective anymore?</small>
+</section>
+<section>
+<div><img src="part4/30.jpg" width="90%"/></div>
+<small style="text-align: justify;">The post mentions two methods to produce embeddings which could be used additionally. Curious to see some visualizations I augmented the TensorFlow code of the GAN and Autoencoder models to collect the logs.</small>
+</section>
+<section>
+<div><img src="part4/30.jpg" width="90%"/></div>
+<small style="text-align: justify;">The logs can then be visualized with TensorBoard - here you can see a 2D PCA of those embeddings (mind that TensorBoard limits the number of displayed data points). To my untrained eye it would seem that the two methods captured some good features and indeed show some promise.</small>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js"></script>
+<script>
+Reveal.initialize({
+  center: false,
+  controls: true,
+  transition: "none",
+  progress: true
+});
+</script>
+</body>
+</html>

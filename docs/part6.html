@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<div><img src="part6/01.jpg" width="90%"/></div>
+<small style="text-align: justify;">Numerai & ML - Part 6 - Evaluating predictions</small>
+</section>
+<section>
+<div><img src="part6/02.jpg" width="90%"/></div>
+<small style="text-align: justify;">Beside automating predictions I also want to get them evaluated. To do that I will use pyinotify to catch every prediction file appearing in the data directory. Then, I will use numerapi to evaluate it.</small>
+</section>
+<section>
+<div><img src="part6/03.jpg" width="90%"/></div>
+<small style="text-align: justify;">Let's start first by creating a script responsible for capturing the prediction files.</small>
+</section>
+<section>
+<div><img src="part6/04.jpg" width="90%"/></div>
+<small style="text-align: justify;">It will capture the files when they are closed and therefore ready to be uploaded. Each file matching the pattern found in the data directory will be enqueued. I will also collect the files which are already there.</small>
+</section>
+<section>
+<div><img src="part6/05.jpg" width="90%"/></div>
+<small style="text-align: justify;">I will use glob to capture all matching files. Then, the thread will run the inotify loop and every matching file will be captured as well.</small>
+</section>
+<section>
+<div><img src="part6/06.jpg" width="90%"/></div>
+<small style="text-align: justify;">These files will be served up via a simple interface to the evaluating part of the code.</small>
+</section>
+<section>
+<div><img src="part6/07.jpg" width="90%"/></div>
+<small style="text-align: justify;">Speaking of which,</small>
+</section>
+<section>
+<div><img src="part6/08.jpg" width="90%"/></div>
+<small style="text-align: justify;">the evaluation will run it's own thread.</small>
+</section>
+<section>
+<div><img src="part6/09.jpg" width="90%"/></div>
+<small style="text-align: justify;">But before the thread is started I need to pass credentials to the Numerai API. You can obtain those if you go over to "Account" on the Numerai website.</small>
+</section>
+<section>
+<div><img src="part6/10.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then, click on "Custom API Keys".</small>
+</section>
+<section>
+<div><img src="part6/11.jpg" width="90%"/></div>
+<small style="text-align: justify;">Type a name for the key, select the authorization scope and click "Generate New Key".</small>
+</section>
+<section>
+<div><img src="part6/12.jpg" width="90%"/></div>
+<small style="text-align: justify;">You will then get the Public ID and the Secret Key which you can use with this container.</small>
+</section>
+<section>
+<div><img src="part6/13.jpg" width="90%"/></div>
+<small style="text-align: justify;">Coming back to the evaluator script the main thread will read the paths of the captured prediction files and submit them for evaluation.</small>
+</section>
+<section>
+<div><img src="part6/14.jpg" width="90%"/></div>
+<small style="text-align: justify;">First the prediction will be uploaded using Numerai API. Then, the status will be checked periodically to see if the evaluation is complete.</small>
+</section>
+<section>
+<div><img src="part6/15.jpg" width="90%"/></div>
+<small style="text-align: justify;">Once the status is ready it will be stored in a JSON file (named after the prediction file).</small>
+</section>
+<section>
+<div><img src="part6/16.jpg" width="90%"/></div>
+<small style="text-align: justify;">Just like with explorer the Dockerfile is quite simple. The required modules are installed in the container image, the Python scripts added as well and the evaluator is executed when the container is launched.</small>
+</section>
+<section>
+<div><img src="part6/17.jpg" width="90%"/></div>
+<small style="text-align: justify;">Use this command to run the Docker container. Note that it assumes that the current directory is bound as a volume to store all the data. Make sure to pass the credentials and the location of the data volume directory within the container.</small>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js"></script>
+<script>
+Reveal.initialize({
+  center: false,
+  controls: true,
+  transition: "none",
+  progress: true
+});
+</script>
+</body>
+</html>

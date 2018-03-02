@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<div><img src="part7/01.jpg" width="90%"/></div>
+<small style="text-align: justify;">Numerai & ML - Part 7 - Concordant, original, 100% consistent</small>
+</section>
+<section>
+<div><img src="part7/02.jpg" width="90%"/></div>
+<small style="text-align: justify;">In previous two parts I covered creating a Luigi pipeline I called Explorer which is taking care of generation of prediction files with various models...</small>
+</section>
+<section>
+<div><img src="part7/03.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and creation of Evaluator which was capturing those prediction files and submitting them automatically for evaluation by Numerai.</small>
+</section>
+<section>
+<div><img src="part7/04.jpg" width="90%"/></div>
+<small style="text-align: justify;">In this part I will reuse the code capturing files...</small>
+</section>
+<section>
+<div><img src="part7/05.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and the code which looks up the data volume binding for the container.</small>
+</section>
+<section>
+<div><img src="part7/06.jpg" width="90%"/></div>
+<small style="text-align: justify;">Before I get to the core functionality of the mixer I need to create a class which will hold the report (including the path of the prediction file, name of the model and the results of the evaluation).</small>
+</section>
+<section>
+<div><img src="part7/07.jpg" width="90%"/></div>
+<small style="text-align: justify;">It is handy to have a method for comparing reports.</small>
+</section>
+<section>
+<div><img src="part7/08.jpg" width="90%"/></div>
+<small style="text-align: justify;">It will consider concordant predictions before non-concordant ones,</small>
+</section>
+<section>
+<div><img src="part7/09.jpg" width="90%"/></div>
+<small style="text-align: justify;">original before the unoriginal ones,</small>
+</section>
+<section>
+<div><img src="part7/10.jpg" width="90%"/></div>
+<small style="text-align: justify;">it will also consider predictions with higher consistency</small>
+</section>
+<section>
+<div><img src="part7/11.jpg" width="90%"/></div>
+<small style="text-align: justify;">and lower log-loss first.</small>
+</section>
+<section>
+<div><img src="part7/12.jpg" width="90%"/></div>
+<small style="text-align: justify;">To make it easier to compare reports I will add suitable operators to the class.</small>
+</section>
+<section>
+<div><img src="part7/13.jpg" width="90%"/></div>
+<small style="text-align: justify;">I will also add a method to return a simplified string representation of the report (see an example below).</small>
+</section>
+<section>
+<div><img src="part7/14.jpg" width="90%"/></div>
+<small style="text-align: justify;">Moving on to the main class of the Mixer it will be a thread started automatically which will capture report files and keep them in a sorted list and collect them in a look-up table (with the name of the model as a key).</small>
+</section>
+<section>
+<div><img src="part7/15.jpg" width="90%"/></div>
+<small style="text-align: justify;">The thread will collect all the reports as they appear and create a ranking based on the rules described earlier.</small>
+</section>
+<section>
+<div><img src="part7/16.jpg" width="90%"/></div>
+<small style="text-align: justify;">The method collecting reports reads paths from the capture queue, creates the Report objects from the contents of the report files and puts them into the sorted list and the look-up table if they are new.</small>
+</section>
+<section>
+<div><img src="part7/17.jpg" width="90%"/></div>
+<small style="text-align: justify;">Having a sorted list of reports allows to generate a ranking file simply by iterating the list.</small>
+</section>
+<section>
+<div><img src="part7/18.jpg" width="90%"/></div>
+<small style="text-align: justify;">After the Explorer is finished the ranking file would look more or less like this. We want to combine those predictions somehow though to improve the results.</small>
+</section>
+<section>
+<div><img src="part7/19.jpg" width="90%"/></div>
+<small style="text-align: justify;">Let's introduce a way to encode and decode the names of combined predictions.</small>
+</section>
+<section>
+<div><img src="part7/20.jpg" width="90%"/></div>
+<small style="text-align: justify;">I also want to combine only the predictions which at least pass one of the admission criteria.</small>
+</section>
+<section>
+<div><img src="part7/21.jpg" width="90%"/></div>
+<small style="text-align: justify;">To combine the predictions we will go through the sorted list of reports and combine the best two which were not tried yet (meaning: the combination is neither among the available reports and nor is it waiting for evaluation).</small>
+</section>
+<section>
+<div><img src="part7/22.jpg" width="90%"/></div>
+<small style="text-align: justify;">You may have noticed that the method combining the predictions is called ensemble. Indeed, I am first collecting all the names of the prediction files to be combined, look up the data volume details...</small>
+</section>
+<section>
+<div><img src="part7/23.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and I use the ensembling method implemented by Jim Fleming by running the container I created out of his code.</small>
+</section>
+<section>
+<div><img src="part7/24.jpg" width="90%"/></div>
+<small style="text-align: justify;">With this code in place let's have a look at the thread function again.</small>
+</section>
+<section>
+<div><img src="part7/25.jpg" width="90%"/></div>
+<small style="text-align: justify;">All we need to do now is add a call to the "mix" method.</small>
+</section>
+<section>
+<div><img src="part7/26.jpg" width="90%"/></div>
+<small style="text-align: justify;">Over time you will observe the ranking file being populated with various ensembles of the predictions from the base models. This simple method allowed me to reach very good results.</small>
+</section>
+<section>
+<div><img src="part7/27.jpg" width="90%"/></div>
+<small style="text-align: justify;">The only thing left is to collect the required modules...</small>
+</section>
+<section>
+<div><img src="part7/28.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and use a Dockerfile very similar to the one used by Eveluator.</small>
+</section>
+<section>
+<div><img src="part7/29.jpg" width="90%"/></div>
+<small style="text-align: justify;">Here's the command to run the Docker container. It assumes that the current directory is going to be a volume to store all the data.</small>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js"></script>
+<script>
+Reveal.initialize({
+  center: false,
+  controls: true,
+  transition: "none",
+  progress: true
+});
+</script>
+</body>
+</html>

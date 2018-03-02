@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<div><img src="part3/01.jpg" width="90%"/></div>
+<small style="text-align: justify;">Numerai & ML - Part 3 - Automatic ML: auto-sklearn & Auto-WEKA</small>
+</section>
+<section>
+<div><img src="part3/02.jpg" width="90%"/></div>
+<small style="text-align: justify;">In previous two parts I showed examples where a particular model is trained and then applied to generate predictions. One decision to make was which learning method to use.</small>
+</section>
+<section>
+<div><img src="part3/03.jpg" width="90%"/></div>
+<small style="text-align: justify;">For example, a logistic regression...</small>
+</section>
+<section>
+<div><img src="part3/04.jpg" width="90%"/></div>
+<small style="text-align: justify;">...or a deep neural network...</small>
+</section>
+<section>
+<div><img src="part3/05.jpg" width="90%"/></div>
+<small style="text-align: justify;">...or a support vector machine.</small>
+</section>
+<section>
+<div><img src="part3/06.jpg" width="90%"/></div>
+<small style="text-align: justify;">Another decision was which values of the hyper-parameters to use (and I used grid search to automate it).</small>
+</section>
+<section>
+<div><img src="part3/07.jpg" width="90%"/></div>
+<small style="text-align: justify;">Yet another decision was related the application of feature engineering...</small>
+</section>
+<section>
+<div><img src="part3/08.jpg" width="90%"/></div>
+<small style="text-align: justify;">...which could be feature scaling or normalization...</small>
+</section>
+<section>
+<div><img src="part3/09.jpg" width="90%"/></div>
+<small style="text-align: justify;">...or calculating polynomials of the input features or application of other functions.</small>
+</section>
+<section>
+<div><img src="part3/10.jpg" width="90%"/></div>
+<small style="text-align: justify;">But what if all that could be automated? Turns out there are frameworks which do just that. One such framework is Python-based auto-sklearn.</small>
+</section>
+<section>
+<div><img src="part3/11.jpg" width="90%"/></div>
+<small style="text-align: justify;">Because it automates application of scikit-learn we can start with the familiar code reading the training and tournament data...</small>
+</section>
+<section>
+<div><img src="part3/12.jpg" width="90%"/></div>
+<small style="text-align: justify;">...then extract the names of the feature columns...</small>
+</section>
+<section>
+<div><img src="part3/13.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and read the training feature values, corresponding target class values, tournament feature values and their identifiers.</small>
+</section>
+<section>
+<div><img src="part3/14.jpg" width="90%"/></div>
+<small style="text-align: justify;">Once that's done, we can create a meta-model and fit it to the training data.</small>
+</section>
+<section>
+<div><img src="part3/15.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then we can use it to make the prediction...</small>
+</section>
+<section>
+<div><img src="part3/16.jpg" width="90%"/></div>
+<small style="text-align: justify;">...remembering to clip the probabilities to an open interval from 0 to 1...</small>
+</section>
+<section>
+<div><img src="part3/17.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and store them together with the record identifiers.</small>
+</section>
+<section>
+<div><img src="part3/18.jpg" width="90%"/></div>
+<small style="text-align: justify;">Like in previous cases I prepared requirements files. One with the modules auto-sklearn depends on...</small>
+</section>
+<section>
+<div><img src="part3/19.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and another one with auto-sklearn.</small>
+</section>
+<section>
+<div><img src="part3/20.jpg" width="90%"/></div>
+<small style="text-align: justify;">I also created the Dockerfile which uses Python 3 base image.</small>
+</section>
+<section>
+<div><img src="part3/21.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then, it installs libraries necessary for algebraic computation and other purposes.</small>
+</section>
+<section>
+<div><img src="part3/22.jpg" width="90%"/></div>
+<small style="text-align: justify;">It also installs the Python modules listed earlier.</small>
+</section>
+<section>
+<div><img src="part3/23.jpg" width="90%"/></div>
+<small style="text-align: justify;">...as well as the Python script to be called when the container is executed.</small>
+</section>
+<section>
+<div><img src="part3/24.jpg" width="90%"/></div>
+<small style="text-align: justify;">Assuming the Docker is installed and you are in the directory which contains a Numerai dataset you can run the code like this.</small>
+</section>
+<section>
+<div><img src="part3/25.jpg" width="90%"/></div>
+<small style="text-align: justify;">There are more frameworks automating application of machine learning. Auto-WEKA is an another example (this time - Java-based).</small>
+</section>
+<section>
+<div><img src="part3/26.jpg" width="90%"/></div>
+<small style="text-align: justify;">Fortunately, it is possible to use it from the command line so I will create a script (which will exit immediately in case of a failure).</small>
+</section>
+<section>
+<div><img src="part3/27.jpg" width="90%"/></div>
+<small style="text-align: justify;">I noticed that the framework requires at least 10GB of memory to work on Numerai data.</small>
+</section>
+<section>
+<div><img src="part3/28.jpg" width="90%"/></div>
+<small style="text-align: justify;">The framework works with the ARFF format so it is necessary to convert the training data. Let's start by counting the number of rows.</small>
+</section>
+<section>
+<div><img src="part3/29.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then, we convert all of the rows of the CSV file to the ARFF file...</small>
+</section>
+<section>
+<div><img src="part3/30.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and we remove first three columns to leave only the feature and the target values.</small>
+</section>
+<section>
+<div><img src="part3/31.jpg" width="90%"/></div>
+<small style="text-align: justify;">We also rename the "target" column name to "class" and declare it to have only two values - 0 or 1.</small>
+</section>
+<section>
+<div><img src="part3/32.jpg" width="90%"/></div>
+<small style="text-align: justify;">In a similar way we also convert the tournament data file.</small>
+</section>
+<section>
+<div><img src="part3/33.jpg" width="90%"/></div>
+<small style="text-align: justify;">Once the data is ready we train and store the model...</small>
+</section>
+<section>
+<div><img src="part3/34.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and apply it to generate the predictions which are then stored in a "raw" output file.</small>
+</section>
+<section>
+<div><img src="part3/35.jpg" width="90%"/></div>
+<small style="text-align: justify;">To convert the predictions to a format accepted by Numerai let's list the original tournament data...</small>
+</section>
+<section>
+<div><img src="part3/36.jpg" width="90%"/></div>
+<small style="text-align: justify;">...skip the first line which contains the names of the columns...</small>
+</section>
+<section>
+<div><img src="part3/37.jpg" width="90%"/></div>
+<small style="text-align: justify;">...grab only the first column with the identifiers and store them in a separate file.</small>
+</section>
+<section>
+<div><img src="part3/38.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then, let's list the raw output file...</small>
+</section>
+<section>
+<div><img src="part3/39.jpg" width="90%"/></div>
+<small style="text-align: justify;">...skip the empty lines...</small>
+</section>
+<section>
+<div><img src="part3/40.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and first two lines with the header...</small>
+</section>
+<section>
+<div><img src="part3/41.jpg" width="90%"/></div>
+<small style="text-align: justify;">...split the remaining output with the ":" delimiter and use only the third column...</small>
+</section>
+<section>
+<div><img src="part3/42.jpg" width="90%"/></div>
+<small style="text-align: justify;">...then drop the "+" indicator...</small>
+</section>
+<section>
+<div><img src="part3/43.jpg" width="90%"/></div>
+<small style="text-align: justify;">...use the prediction probability column if the prediction is 1 (or its complement if the prediction is 0)...</small>
+</section>
+<section>
+<div><img src="part3/44.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and after clipping the probabilities to an open interval from 0 to 1 store them in a separate file.</small>
+</section>
+<section>
+<div><img src="part3/45.jpg" width="90%"/></div>
+<small style="text-align: justify;">Now, the only thing we need is to create the submission file with the right header...</small>
+</section>
+<section>
+<div><img src="part3/46.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and then join the files with the identifiers and the probability values and append the result to the submission file.</small>
+</section>
+<section>
+<div><img src="part3/47.jpg" width="90%"/></div>
+<small style="text-align: justify;">The Docker file is going to be based on Ubuntu LTE image...</small>
+</section>
+<section>
+<div><img src="part3/48.jpg" width="90%"/></div>
+<small style="text-align: justify;">...with addition of build tools, Java, curl, unzip and libraries for arithmetic calculations...</small>
+</section>
+<section>
+<div><img src="part3/49.jpg" width="90%"/></div>
+<small style="text-align: justify;">...we need to create a user to avoid the issues of running the framework as root...</small>
+</section>
+<section>
+<div><img src="part3/50.jpg" width="90%"/></div>
+<small style="text-align: justify;">...then we need to download and install WEKA...</small>
+</section>
+<section>
+<div><img src="part3/51.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and the Auto-WEKA package.</small>
+</section>
+<section>
+<div><img src="part3/52.jpg" width="90%"/></div>
+<small style="text-align: justify;">Finally, we need to copy the shell script and call it as root when the container is executed.</small>
+</section>
+<section>
+<div><img src="part3/53.jpg" width="90%"/></div>
+<small style="text-align: justify;">Here is the command to run that container. Note that the container image name is different in this case.</small>
+</section>
+<section>
+<div><img src="part3/54.jpg" width="90%"/></div>
+<small style="text-align: justify;">So what was the score for each of these two? In both cases the predictions met two criteria with a rather low log loss values. Unfortunately, that's still not good enough to qualify.</small>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js"></script>
+<script>
+Reveal.initialize({
+  center: false,
+  controls: true,
+  transition: "none",
+  progress: true
+});
+</script>
+</body>
+</html>

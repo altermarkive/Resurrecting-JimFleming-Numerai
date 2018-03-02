@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<div><img src="part2/01.jpg" width="90%"/></div>
+<small style="text-align: justify;">Numerai & ML - Part 2 - First models: Random Forests, Support Vector Machine, Logistic Regression, Gradient Boosting, Deep Neural Network</small>
+</section>
+<section>
+<div><img src="part2/02.jpg" width="90%"/></div>
+<small style="text-align: justify;">Looking for inspiration I came across the Tech in Pink blog where the author is giving a couple of examples.</small>
+</section>
+<section>
+<div><img src="part2/03.jpg" width="90%"/></div>
+<small style="text-align: justify;">In two posts the author demonstrates how to apply to this task the following learning methods: random forests, random forests with hyper-parameter grid search and support vector machine.</small>
+</section>
+<section>
+<div><img src="part2/04.jpg" width="90%"/></div>
+<small style="text-align: justify;">Since the time of publishing the format of the data changed to the one shown here. Therefore, I had to modify the code.</small>
+</section>
+<section>
+<div><img src="part2/05.jpg" width="90%"/></div>
+<small style="text-align: justify;">I added the code to extract the names of the feature columns.</small>
+</section>
+<section>
+<div><img src="part2/06.jpg" width="90%"/></div>
+<small style="text-align: justify;">The list of feature columns had to be applied to extracting of feature values from training data.</small>
+</section>
+<section>
+<div><img src="part2/07.jpg" width="90%"/></div>
+<small style="text-align: justify;">The name of the ID column also needed to be changed.</small>
+</section>
+<section>
+<div><img src="part2/08.jpg" width="90%"/></div>
+<small style="text-align: justify;">And the list of feature columns had to be applied to the prediction code as well.</small>
+</section>
+<section>
+<div><img src="part2/09.jpg" width="90%"/></div>
+<small style="text-align: justify;">Storing the predictions to disk also did not match the currently required format.</small>
+</section>
+<section>
+<div><img src="part2/10.jpg" width="90%"/></div>
+<small style="text-align: justify;">Thus, this had to be adjusted as well.</small>
+</section>
+<section>
+<div><img src="part2/11.jpg" width="90%"/></div>
+<small style="text-align: justify;">As it turns out, the submission process may fail if the probability is equal to 0 or 1.</small>
+</section>
+<section>
+<div><img src="part2/12.jpg" width="90%"/></div>
+<small style="text-align: justify;">Therefore, it was necessary to find out the granularity of the floating-point type.</small>
+</section>
+<section>
+<div><img src="part2/13.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and clip the probabilities to an open interval from 0 to 1.</small>
+</section>
+<section>
+<div><img src="part2/14.jpg" width="90%"/></div>
+<small style="text-align: justify;">The code also raised a few deprecation warnings. In particular, the cross validation and grid search were moved to the model selection module.</small>
+</section>
+<section>
+<div><img src="part2/15.jpg" width="90%"/></div>
+<small style="text-align: justify;">There was also some obsolete Python 2 code which needed to be updated to Python 3.</small>
+</section>
+<section>
+<div><img src="part2/16.jpg" width="90%"/></div>
+<small style="text-align: justify;">To gain some flexibility I decided to replace the hard-coded file names by parameters obtained from environment variables...</small>
+</section>
+<section>
+<div><img src="part2/17.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and to introduce a main script called run.py which allows me to select the learning method.</small>
+</section>
+<section>
+<div><img src="part2/18.jpg" width="90%"/></div>
+<small style="text-align: justify;">For some of the learning methods it is possible to use all CPU cores and in scikit-learn this can be enabled by setting n_jobs to -1.</small>
+</section>
+<section>
+<div><img src="part2/19.jpg" width="90%"/></div>
+<small style="text-align: justify;">It is not possible though for support vector machine classification.</small>
+</section>
+<section>
+<div><img src="part2/20.jpg" width="90%"/></div>
+<small style="text-align: justify;">To keep the code clean I decided to wrap the code in a Docker container. Therefore, I needed to prepare requirements.txt file with all the necessary modules...</small>
+</section>
+<section>
+<div><img src="part2/21.jpg" width="90%"/></div>
+<small style="text-align: justify;">...including NumPy and SciPy modules...</small>
+</section>
+<section>
+<div><img src="part2/22.jpg" width="90%"/>...Pandas module...</div>
+<small style="text-align: justify;"></small>
+</section>
+<section>
+<div><img src="part2/23.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and sckit-learn...</small>
+</section>
+<section>
+<div><img src="part2/24.jpg" width="90%"/></div>
+<small style="text-align: justify;">I also needed to create the Dockerfile.</small>
+</section>
+<section>
+<div><img src="part2/25.jpg" width="90%"/></div>
+<small style="text-align: justify;">Which uses Python 3 as the base image.</small>
+</section>
+<section>
+<div><img src="part2/26.jpg" width="90%"/></div>
+<small style="text-align: justify;">Then, it installs libraries for algebraic computation.</small>
+</section>
+<section>
+<div><img src="part2/27.jpg" width="90%"/></div>
+<small style="text-align: justify;">It also installs the Python modules listed earlier...</small>
+</section>
+<section>
+<div><img src="part2/28.jpg" width="90%"/></div>
+<small style="text-align: justify;">...as well as the Python scripts...</small>
+</section>
+<section>
+<div><img src="part2/29.jpg" width="90%"/></div>
+<small style="text-align: justify;">...and it calls the main run.py file when the container is executed.</small>
+</section>
+<section>
+<div><img src="part2/30.jpg" width="90%"/></div>
+<small style="text-align: justify;">To make sure the container is rebuilt whenever I make a modification I use the Travis CI.</small>
+</section>
+<section>
+<div><img src="part2/31.jpg" width="90%"/></div>
+<small style="text-align: justify;">...with a configurable user name and password.</small>
+</section>
+<section>
+<div><img src="part2/32.jpg" width="90%"/></div>
+<small style="text-align: justify;">Assuming the Docker is installed and you are in the directory which contains a Numerai dataset you can run the code like this.</small>
+</section>
+<section>
+<div><img src="part2/33.jpg" width="90%"/></div>
+<small style="text-align: justify;">This example command applies the SVM learning method but you can also use RFC and RFC-Grid.</small>
+</section>
+<section>
+<div><img src="part2/34.jpg" width="90%"/></div>
+<small style="text-align: justify;">Searching further I also found an interesting post on Fast ML blog where the author applies random forest and logistic regression learning methods with data transformers.</small>
+</section>
+<section>
+<div><img src="part2/35.jpg" width="90%"/></div>
+<small style="text-align: justify;">As a side-note, the author also has another blog entry explaining how the consistency admission criterion is calculated.</small>
+</section>
+<section>
+<div><img src="part2/36.jpg" width="90%"/></div>
+<small style="text-align: justify;">Same as before I needed to adjust the code for new data format and open probability interval, fix the deprecated code, add parameters, enable multi-core processing and wrap the code in a container built with the Travis CI.</small>
+</section>
+<section>
+<div><img src="part2/37.jpg" width="90%"/></div>
+<small style="text-align: justify;">Here is the command to run that container. Note that the container image name is different and that it offers only two learning methods - RFC and logistic regression.</small>
+</section>
+<section>
+<div><img src="part2/38.jpg" width="90%"/></div>
+<small style="text-align: justify;">Beside Googling for blog posts about Numerai I also searched GitHub directly.</small>
+</section>
+<section>
+<div><img src="part2/39.jpg" width="90%"/></div>
+<small style="text-align: justify;">That's how I found this repository published by the user Jeremy123W which applies gradient boosting and deep neural network learning methods.</small>
+</section>
+<section>
+<div><img src="part2/40.jpg" width="90%"/></div>
+<small style="text-align: justify;">I went through the same steps here as well. With the exception of applying multi-core processing - the code was running fast enough for my purposes.</small>
+</section>
+<section>
+<div><img src="part2/41.jpg" width="90%"/></div>
+<small style="text-align: justify;">Here is the command to run that container. As before, the container has its own name and it offers two learning methods one called XGBoost (after the module it uses) and another named WideAndDeep.</small>
+</section>
+<section>
+<div><img src="part2/42.jpg" width="90%"/></div>
+<small style="text-align: justify;">By now you're probably curious what was the score for each of these learning methods.</small>
+</section>
+<section>
+<div><img src="part2/42.jpg" width="90%"/></div>
+<small style="text-align: justify;">First the code from Tech in Pink - the random forest had a very low score, including hyper parameter search helped but it only managed to reach one of the three admission criteria, SVM had a better log loss and worse consistency and took very long to train.</small>
+</section>
+<section>
+<div><img src="part2/42.jpg" width="90%"/></div>
+<small style="text-align: justify;">The code from Fast ML did worse with random forest method but logistic regression achieved one of the lowest log loss values and one of the highest consistency values.</small>
+</section>
+<section>
+<div><img src="part2/42.jpg" width="90%"/></div>
+<small style="text-align: justify;">The best results were obtained with Jeremy's code while the DNN code was on par with the logistic regression the XGBoost actually met two criteria. Good to see some progress!</small>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js"></script>
+<script>
+Reveal.initialize({
+  center: false,
+  controls: true,
+  transition: "none",
+  progress: true
+});
+</script>
+</body>
+</html>
