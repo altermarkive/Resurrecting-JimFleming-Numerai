@@ -9,10 +9,10 @@ I chose to apply it to Numerai. It's a hedge fund where trades are determined ba
 
 I created a 7 part series documenting my journey through the experiments:
 
-* [Part 1 - Basics](docs/part1.html)
-* [Part 2 - First models: Random Forests, Support Vector Machine, Logistic Regression, Gradient Boosting, Deep Neural Network](docs/part2.html)
-* [Part 3 - Automatic ML: auto-sklearn & Auto-WEKA](docs/part3.html)
-* [Part 4 - Jim Fleming's models](docs/part4.html)
-* [Part 5 - Automating with Luigi](docs/part5.html)
-* [Part 6 - Evaluating predictions](docs/part6.html)
-* [Part 7 - Concordant, original, 100% consistent](docs/part7.html)
+* [Part 1 - Basics](https://altermarkive.github.io/numerai-experiments/docs/part1.html)
+* [Part 2 - First models: Random Forests, Support Vector Machine, Logistic Regression, Gradient Boosting, Deep Neural Network](https://altermarkive.github.io/numerai-experiments/docs/part2.html)
+* [Part 3 - Automatic ML: auto-sklearn & Auto-WEKA](https://altermarkive.github.io/numerai-experiments/docs/part3.html)
+* [Part 4 - Jim Fleming's models](https://altermarkive.github.io/numerai-experiments/docs/part4.html)
+* [Part 5 - Automating with Luigi](https://altermarkive.github.io/numerai-experiments/docs/part5.html)
+* [Part 6 - Evaluating predictions](https://altermarkive.github.io/numerai-experiments/docs/part6.html)
+* [Part 7 - Concordant, original, 100% consistent](https://altermarkive.github.io/numerai-experiments/docs/part7.html)
